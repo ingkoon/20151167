@@ -1,36 +1,35 @@
-import paho.mqtt.client as mqtt
+# import pika
 
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print("connected OK")
-    else:
-        print("Bad connection Returned code=", rc)
+# connection = pika.BlockingConnection(pika.ConnectionParameters(host = '192.168.1.101', port = ))
 
+# channel = connection.channel()
 
-def on_disconnect(client, userdata, flags, rc=0):
-    print(str(rc))
+# channel.queue_declare(queue = 'Hello')
 
-
-def on_subscribe(client, userdata, mid, granted_qos):
-    print("subscribed: " + str(mid) + " " + str(granted_qos))
+# def callback(ch, method, properties, body):
+#     print("수신완료: %r"%body)
 
 
-def on_message(client, userdata, msg):
-    print(str(msg.payload.decode("utf-8")))
+# print("새 메시지 대기중. 종료를 원할 시, ctrl + C를 누르세요")
 
+# channel.start_consuming()
 
-# 새로운 클라이언트 생성
-client = mqtt.Client()
-# 콜백 함수 설정 on_connect(브로커에 접속), on_disconnect(브로커에 접속중료), on_subscribe(topic 구독),
-# on_message(발행된 메세지가 들어왔을 때)
-client.on_connect = on_connect
-client.on_disconnect = on_disconnect
-client.on_subscribe = on_subscribe
-client.on_message = on_message
-# 로컬 아닌, 원격 mqtt broker에 연결
-# address : broker.hivemq.com
-# port: 1883 에 연결
-client.connect('broker.hivemq.com', 1883)
-# test/hello 라는 topic 구독
-client.subscribe('test/hello', 1)
-client.loop_forever()
+import pika 
+class Publisher: 
+    def __init__(self): 
+        self.__url = '192.168.1.101' 
+        self.__port = 5672 
+        self.__vhost = 'master' 
+        self.__cred = pika.PlainCredentials('master', 'cucumber52') 
+        self.__queue = 'test_mq'; return 
+    
+    def main(self): 
+        conn = pika.BlockingConnection(pika.ConnectionParameters(self.__url, self.__port, self.__vhost, self.__cred)) 
+        chan = conn.channel() 
+        chan.basic_publish( exchange = '', routing_key = self.__queue, body = 'Hello RabbitMQ' ) 
+        conn.close() 
+        return 
+
+publisher = Publisher() 
+publisher.main()
+

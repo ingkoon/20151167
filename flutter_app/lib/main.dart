@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'BGSTATE'),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -45,12 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '테스트',
+              '로그인화면',
             ),
             ButtonBar(),
             ElevatedButton(
                 style: style,
-                child: const Text('혈당 확인'),
+                child: const Text('로그인'),
                 onPressed: () {
                   Navigator.push(
                       context, MaterialPageRoute(builder: (context) => UI()));

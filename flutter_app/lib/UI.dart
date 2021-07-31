@@ -1,29 +1,37 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_app/main.dart';
 
+//기본 배경의 역할을 하는 stateless위젯
 class UI extends StatelessWidget {
   const UI({Key? key}) : super(key: key);
 
+  // 빌드 단계
   @override
   Widget build(BuildContext context) {
+    // 머티리얼 앱 반환
     return MaterialApp(
+      // 타이틀 지정
       title: 'UI',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      // 메인이 될 페이지 지정
       home: UI_Page(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
+//메인 페이지 지정
 class UI_Page extends StatefulWidget {
   const UI_Page({Key? key}) : super(key: key);
 
+  //동적 페이지 생성
   @override
   _UI_Page createState() => _UI_Page();
 }
 
+//메인 페이지 
 class _UI_Page extends State<UI_Page> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -56,9 +64,7 @@ class _UI_Page extends State<UI_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
-      ),
+      appBar: AppBar(),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -73,7 +79,7 @@ class _UI_Page extends State<UI_Page> {
             label: 'Predict BG',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info),
+            icon: Icon(Icons.menu_book),
             label: 'Info',
           ),
           BottomNavigationBarItem(
