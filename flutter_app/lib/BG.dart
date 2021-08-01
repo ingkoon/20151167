@@ -30,19 +30,31 @@ class _BG_Page extends State<BG_Page> {
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[],
+        children: <Widget>[
+          ElevatedButton(onPressed: transfer, child: const Text('테스트'))
+        ],
       )),
     );
   }
 
   void transfer() async {
-    Client client = Client();
+    // mqtt연결 설정 지정
+    ConnectionSettings settings = new ConnectionSettings(
+      host: "192.168.1.101",
+      port: 5672,
+      virtualHost: 'master',
+      authProvider: const AmqPlainAuthenticator('master', 'cucumber52'),
+    );
 
+    // mq client 생성
+    Client client = Client(settings: settings);
     Channel channel = await client.channel();
     Queue queue = await channel.queue('test_mq');
     Consumer consumer = await queue.consume();
+    String data;
     consumer.listen((AmqpMessage message) {
       print("$message.payload");
+      data = message.payloadAsString;
     });
   }
 }

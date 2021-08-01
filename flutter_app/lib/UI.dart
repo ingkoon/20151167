@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_app/main.dart';
+import 'package:flutter_app/BG.dart';
 
 //기본 배경의 역할을 하는 stateless위젯
 class UI extends StatelessWidget {
@@ -31,7 +32,7 @@ class UI_Page extends StatefulWidget {
   _UI_Page createState() => _UI_Page();
 }
 
-//메인 페이지 
+//메인 페이지
 class _UI_Page extends State<UI_Page> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
