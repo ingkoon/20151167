@@ -30,6 +30,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   fl_chart: ^0.36.2
   kafka: ^0.0.1
+  mqtt_client: ^9.4.1
+  dart_amqp: ^0.2.0
 
 dev_dependencies:
   flutter_test:

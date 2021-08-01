@@ -14,7 +14,6 @@ def main():
 
 
     channel.basic_consume(queue='test_mq', on_message_callback=callback, auto_ack=True)
-
     print("새 메시지 대기중. 종료를 원할 시, ctrl + C를 누르세요")
 
     channel.start_consuming()

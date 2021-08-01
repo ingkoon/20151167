@@ -1,6 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:kafka/kafka.dart';
+import 'package:dart_amqp/dart_amqp.dart';
 
 class BG extends StatelessWidget {
   @override
@@ -31,5 +33,16 @@ class _BG_Page extends State<BG_Page> {
         children: <Widget>[],
       )),
     );
+  }
+
+  void transfer() async {
+    Client client = Client();
+
+    Channel channel = await client.channel();
+    Queue queue = await channel.queue('test_mq');
+    Consumer consumer = await queue.consume();
+    consumer.listen((AmqpMessage message) {
+      print("$message.payload");
+    });
   }
 }

@@ -10,9 +10,9 @@ channel.queue_declare(queue = 'test_mq', durable=  True, exclusive= False, auto_
 
 def test():
     for i in range(10):
-        channel.basic_publish(exchange='', routing_key='hello', body='Hello RabbitMQ!')
+        channel.basic_publish(exchange='', routing_key='test_mq', body='Hello RabbitMQ!')
         print(" [x] Sent 'Hello RabbitMQ! %d'" %i)
-        time.sleep(5)
+        time.sleep(1)
 
 
 test()
