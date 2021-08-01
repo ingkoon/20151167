@@ -1,12 +1,19 @@
 import pika
+import time
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='192.168.1.101',port = 5672, virtual_host  = '/',credentials=pika.PlainCredentials('master', 'cucumber52')))
-
+credentials = pika.PlainCredentials('master', 'cucumber52')
+connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.1.101', port = 5672, virtual_host='master', credentials= credentials))
 channel = connection.channel()
+    
+channel.queue_declare(queue = 'test_mq', durable=  True, exclusive= False, auto_delete= False)
 
 
-for i in range(10000):
-    channel.basic_publish(exchange = '', routing_key = 'Hello', body = str(i))
-    print("# 메시지 전송 완료" + str(i))
+def test():
+    for i in range(10):
+        channel.basic_publish(exchange='', routing_key='hello', body='Hello RabbitMQ!')
+        print(" [x] Sent 'Hello RabbitMQ! %d'" %i)
+        time.sleep(5)
 
+
+test()
 connection.close()
