@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_app/main.dart';
 import 'package:flutter_app/BG.dart';
 
 //기본 배경의 역할을 하는 stateless위젯
@@ -37,11 +36,8 @@ class _UI_Page extends State<UI_Page> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      '현재 혈당',
-      style: optionStyle,
-    ),
+  static List<Widget> _widgetOptions = <Widget>[
+    BG(),
     Text(
       '예측 혈당',
       style: optionStyle,

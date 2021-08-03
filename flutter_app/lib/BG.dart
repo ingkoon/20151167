@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:dart_amqp/dart_amqp.dart';
@@ -49,12 +47,15 @@ class _BG_Page extends State<BG_Page> {
     // mq client 생성
     Client client = Client(settings: settings);
     Channel channel = await client.channel();
-    Queue queue = await channel.queue('test_mq');
+    Queue queue = await channel.queue('test_mq', durable: true);
     Consumer consumer = await queue.consume();
-    String data;
-    consumer.listen((AmqpMessage message) {
-      print("$message.payload");
-      data = message.payloadAsString;
+
+    print("Connection Success!");
+    print(" [*] Waiting for messages. To exit, press CTRL+C");
+    // String data;
+    consumer.listen((message) {
+      print(" [x] Received ${message.payloadAsString}");
+      // data = message.payloadAsString;
     });
   }
 }
