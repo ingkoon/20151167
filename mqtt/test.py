@@ -17,9 +17,6 @@ start_time = datetime.combine(now.date(), datetime.min.time())
 # Specify results saving path
 path = './results'
 
-async def createGlucose:
-
-
 # Create a simulation environment
 patient = T1DPatient.withName('adolescent#001')
 sensor = CGMSensor.withName('Dexcom', seed=1)
