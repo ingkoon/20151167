@@ -34,21 +34,21 @@ print(results1)
 
 # --------- Create Custom Scenario --------------
 # Create a simulation environment
-patient = T1DPatient.withName('adolescent#001')
-sensor = CGMSensor.withName('Dexcom', seed=1)
-pump = InsulinPump.withName('Insulet')
-# custom scenario is a list of tuples (time, meal_size)
-scen = [(7, 45), (12, 70), (16, 15), (18, 80), (23, 10)]
-scenario = CustomScenario(start_time=start_time, scenario=scen)
-env = T1DSimEnv(patient, sensor, pump, scenario)
+# patient = T1DPatient.withName('adolescent#001')
+# sensor = CGMSensor.withName('Dexcom', seed=1)
+# pump = InsulinPump.withName('Insulet')
+# # custom scenario is a list of tuples (time, meal_size)
+# scen = [(7, 45), (12, 70), (16, 15), (18, 80), (23, 10)]
+# scenario = CustomScenario(start_time=start_time, scenario=scen)
+# env = T1DSimEnv(patient, sensor, pump, scenario)
 
-# Create a controller
-controller = BBController()
+# # Create a controller
+# controller = BBController()
 
-# Put them together to create a simulation object
-s2 = SimObj(env, controller, timedelta(days=1), animate=False, path=path)
-results2 = sim(s2)
-print(results2)
+# # Put them together to create a simulation object
+# s2 = SimObj(env, controller, timedelta(days=1), animate=False, path=path)
+# results2 = sim(s2)
+# print(results2)
 
 
 # --------- batch simulation --------------
