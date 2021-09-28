@@ -1,13 +1,16 @@
+import 'dart:async';
+
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'data.dart';
 import 'package:get/get.dart';
+import 'BG.dart';
 
 final client = MqttServerClient.withPort("192.168.1.101", "orlando", 1883);
 
-Future<int> connect(Data data) async {
+Future<int> connect(Data data, List dataList) async {
   // mqtt연결 설정 지정
   client.logging(on: true);
 
@@ -65,9 +68,11 @@ Future<int> connect(Data data) async {
     print(parsedData);
     print('value is ${parsedData.bg}');
     print('value is ${parsedData.cgm}');
+    print('value is ${parsedData.timeData}');
 
     data.bg = double.parse(parsedData.bg.toStringAsFixed(2));
     data.cgm = double.parse(parsedData.cgm.toStringAsFixed(2));
+    data.timeData = parsedData.timeData.toString();
 
     Get.find<Data>().renew();
 

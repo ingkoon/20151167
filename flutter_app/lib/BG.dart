@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 // 라이브러리 부분
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:get/get.dart';
-import 'dart:math';
+import 'dart:async';
 
 // 모듈 부분
 import 'data.dart';
 import 'connect.dart';
-import 'chartData.dart';
+// import 'chartData.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:intl/intl.dart';
 
 // stateful위젯을 올리기 위한 바탕 위젯
 class BG extends StatelessWidget {
@@ -36,32 +37,83 @@ class BG_Page extends StatefulWidget {
 
 class _BG_Page extends State<BG_Page> {
   // json 파싱을 받기 위한 클래스 선언 및 초기화
-  Data data = new Data(0, 0);
+  Data data = new Data(0, 0, "");
+
+  ChartSeriesController? chartSeriesController;
+  int count = 1;
+  List<chartData> dataList = <chartData>[];
+  Timer? timer;
+  late TooltipBehavior _tooltipBehavior;
+
+  @override
+  void initState() {
+    _tooltipBehavior = TooltipBehavior(enable: true);
+  }
 
   @override
   Widget build(BuildContext context) {
-    connect(data);
+    initState();
+
+    connect(data, dataList);
+
+    timer =
+        Timer.periodic(const Duration(milliseconds: 2000), _updateDataSource);
     return Scaffold(
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           GetBuilder<Data>(
-            init: Data(data.bg, data.cgm),
-            builder: (_) => Text('현재 혈당: ${data.bg}, 관측 값: ${data.cgm}'),
+            init: Data(data.bg, data.cgm, data.timeData),
+            builder: (_) => Column(children: <Widget>[
+              Text(
+                  '현재 혈당: ${data.bg}, 관측 값: ${data.cgm}, 현재시간: ${data.timeData}'),
+              SfCartesianChart(
+                series: <LineSeries<chartData, int>>[
+                  LineSeries<chartData, int>(
+                    onRendererCreated: (ChartSeriesController controller) {
+                      // Assigning the controller to the _chartSeriesController.
+                      chartSeriesController = controller;
+                    },
+                    // Binding the chartData to the dataSource of the line series.
+                    dataSource: dataList,
+                    xValueMapper: (chartData patientdata, _) =>
+                        patientdata.count,
+                    yValueMapper: (chartData patientdata, _) => patientdata.cgm,
+                  )
+                ],
+              ),
+            ]),
           ),
-          // SfCartesianChart(
-          //   series: <LineSeries<LiveData, double>>[
-          //     LineSeries<LiveData, double>(
-          //       dataSource: chartData,
-          //       color: const Color.fromRGBO(192, 108, 132, 1),
-          //       xValueMapper:
-          //       yValueMapper:
-          //     )
-          //   ]
-          // )
         ],
       )),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // Cancelling the timer.
+    timer?.cancel();
+  }
+
+  void _updateDataSource(Timer timer) {
+    dataList.add(chartData(count, data.cgm));
+    if (dataList.length == 60) {
+      // Removes the last index data of data source.
+      dataList.removeAt(0);
+      // Here calling updateDataSource method with addedDataIndexes to add data in last index and removedDataIndexes to remove data from the last.
+      chartSeriesController?.updateDataSource(
+          addedDataIndexes: <int>[dataList.length - 1],
+          removedDataIndexes: <int>[0]);
+    }
+    count = count + 1;
+  }
+}
+
+// 리스트에 넣기 위한 데이터
+class chartData {
+  chartData(this.count, this.cgm);
+  final double cgm;
+  final int count;
 }
