@@ -57,7 +57,7 @@ class _BG_Page extends State<BG_Page> {
     connect(data, dataList);
 
     timer =
-        Timer.periodic(const Duration(milliseconds: 2000), _updateDataSource);
+        Timer.periodic(const Duration(milliseconds: 5000), _updateDataSource);
     return Scaffold(
       body: Center(
           child: Column(
@@ -71,7 +71,13 @@ class _BG_Page extends State<BG_Page> {
                   '현재 혈당: ${data.bg}, 관측 값: ${data.cgm}, 현재시간: ${data.timeData}'),
               SfCartesianChart(
                 tooltipBehavior: _tooltipBehavior,
-                series: <LineSeries<chartData, DateTime>>[
+                primaryXAxis: DateTimeAxis(
+                  // minimum: DateTime.now(),
+                  majorGridLines: MajorGridLines(width: 0),
+                  edgeLabelPlacement: EdgeLabelPlacement.shift,
+                  intervalType: DateTimeIntervalType.hours,
+                ),
+                series: <ChartSeries<chartData, DateTime>>[
                   LineSeries<chartData, DateTime>(
                     onRendererCreated: (ChartSeriesController controller) {
                       // Assigning the controller to the _chartSeriesController.
@@ -101,8 +107,9 @@ class _BG_Page extends State<BG_Page> {
   }
 
   void _updateDataSource(Timer timer) {
-    dataList.add(chartData(count, data.cgm));
-    if (dataList.length == 30) {
+    dataList.add(chartData(
+        DateTime(DateTime.now().hour, DateTime.now().minute), data.cgm));
+    if (dataList.length == 5) {
       // Removes the last index data of data source.
       dataList.removeAt(0);
       // Here calling updateDataSource method with addedDataIndexes to add data in last index and removedDataIndexes to remove data from the last.
@@ -110,17 +117,15 @@ class _BG_Page extends State<BG_Page> {
           addedDataIndexes: <int>[dataList.length - 1],
           removedDataIndexes: <int>[0]);
     }
-    count = count + 1;
   }
 }
 
 // 리스트에 넣기 위한 데이터
 class chartData {
   chartData(
-    this.count,
+    this.time,
     this.cgm,
   );
-  final DateTime time = DateTime.now();
+  final DateTime time;
   final double cgm;
-  final int count;
 }
