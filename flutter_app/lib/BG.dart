@@ -63,22 +63,25 @@ class _BG_Page extends State<BG_Page> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          //상태 감지를 위한 getBuilder 선언
           GetBuilder<Data>(
             init: Data(data.bg, data.cgm, data.timeData),
             builder: (_) => Column(children: <Widget>[
               Text(
                   '현재 혈당: ${data.bg}, 관측 값: ${data.cgm}, 현재시간: ${data.timeData}'),
               SfCartesianChart(
-                series: <LineSeries<chartData, int>>[
-                  LineSeries<chartData, int>(
+                tooltipBehavior: _tooltipBehavior,
+                series: <LineSeries<chartData, DateTime>>[
+                  LineSeries<chartData, DateTime>(
                     onRendererCreated: (ChartSeriesController controller) {
                       // Assigning the controller to the _chartSeriesController.
                       chartSeriesController = controller;
                     },
+                    enableTooltip: true,
                     // Binding the chartData to the dataSource of the line series.
                     dataSource: dataList,
                     xValueMapper: (chartData patientdata, _) =>
-                        patientdata.count,
+                        patientdata.time,
                     yValueMapper: (chartData patientdata, _) => patientdata.cgm,
                   )
                 ],
@@ -99,7 +102,7 @@ class _BG_Page extends State<BG_Page> {
 
   void _updateDataSource(Timer timer) {
     dataList.add(chartData(count, data.cgm));
-    if (dataList.length == 60) {
+    if (dataList.length == 30) {
       // Removes the last index data of data source.
       dataList.removeAt(0);
       // Here calling updateDataSource method with addedDataIndexes to add data in last index and removedDataIndexes to remove data from the last.
@@ -113,7 +116,11 @@ class _BG_Page extends State<BG_Page> {
 
 // 리스트에 넣기 위한 데이터
 class chartData {
-  chartData(this.count, this.cgm);
+  chartData(
+    this.count,
+    this.cgm,
+  );
+  final DateTime time = DateTime.now();
   final double cgm;
   final int count;
 }

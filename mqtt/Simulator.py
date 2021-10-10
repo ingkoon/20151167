@@ -9,7 +9,31 @@ from simglucose.simulation.sim_engine import SimObj, sim, batch_sim
 from datetime import timedelta
 from datetime import datetime
 
+from paho.mqtt import client as mqtt_client
+
+
+
 # specify start_time as the beginning of today
+
+host = "192.168.1.101"
+port = 1883
+topic = "connect-mqtt"
+client_id = "orlando"
+
+client = mqtt_client.Client(client_id)
+client.connect(host) 
+
+# class setHost:    
+#     def setData(self, host, port, topic, client_id):
+#         self.host = host
+#         self.port = port
+#         self.topic = topic
+#         self.client_id = client_id    
+        
+#     def connectMq(self):
+#         client = mqtt_client.Client(self.client_id)
+#         client.connect(self.host)
+
 now = datetime.now()
 start_time = datetime.combine(now.date(), datetime.min.time())
 
