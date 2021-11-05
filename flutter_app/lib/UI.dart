@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/BG.dart';
+import 'package:flutter_app/contents/BG.dart';
+// import 'package:flutter_app/contents/predictBG.dart';
+// import 'package:flutter_app/contents/information.dart';
+// import 'package:flutter_app/contents/user.dart';
 
 //기본 배경의 역할을 하는 stateless위젯
 class UI extends StatelessWidget {

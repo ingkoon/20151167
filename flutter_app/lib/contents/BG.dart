@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'dart:async';
 
 // 모듈 부분
-import 'data.dart';
-import 'connect.dart';
+import 'package:flutter_app/sub/data.dart';
+import 'package:flutter_app/sub/connect.dart';
 // import 'chartData.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:intl/intl.dart';
@@ -57,7 +57,7 @@ class _BG_Page extends State<BG_Page> {
     connect(data, dataList);
 
     timer =
-        Timer.periodic(const Duration(milliseconds: 5000), _updateDataSource);
+        Timer.periodic(const Duration(milliseconds: 30000), _updateDataSource);
     return Scaffold(
       body: Center(
           child: Column(
@@ -72,11 +72,25 @@ class _BG_Page extends State<BG_Page> {
               SfCartesianChart(
                 tooltipBehavior: _tooltipBehavior,
                 primaryXAxis: DateTimeAxis(
-                  // minimum: DateTime.now(),
-                  majorGridLines: MajorGridLines(width: 0),
-                  edgeLabelPlacement: EdgeLabelPlacement.shift,
-                  intervalType: DateTimeIntervalType.hours,
-                ),
+                    minimum: DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        DateTime.now().hour - 1,
+                        DateTime.now().minute),
+                    maximum: DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        DateTime.now().hour + 1,
+                        DateTime.now().minute),
+                    rangePadding: ChartRangePadding.additional,
+                    majorGridLines: MajorGridLines(width: 1),
+                    edgeLabelPlacement: EdgeLabelPlacement.shift,
+                    intervalType: DateTimeIntervalType.minutes,
+                    interval: 10),
+                primaryYAxis:
+                    NumericAxis(minimum: 0, maximum: 300, interval: 50),
                 series: <ChartSeries<chartData, DateTime>>[
                   LineSeries<chartData, DateTime>(
                     onRendererCreated: (ChartSeriesController controller) {
@@ -108,15 +122,23 @@ class _BG_Page extends State<BG_Page> {
 
   void _updateDataSource(Timer timer) {
     dataList.add(chartData(
-        DateTime(DateTime.now().hour, DateTime.now().minute), data.cgm));
-    if (dataList.length == 5) {
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+            DateTime.now().hour, DateTime.now().minute),
+        data.cgm));
+
+    if (dataList.length == 100) {
       // Removes the last index data of data source.
       dataList.removeAt(0);
       // Here calling updateDataSource method with addedDataIndexes to add data in last index and removedDataIndexes to remove data from the last.
       chartSeriesController?.updateDataSource(
           addedDataIndexes: <int>[dataList.length - 1],
           removedDataIndexes: <int>[0]);
+    } else {
+      chartSeriesController?.updateDataSource(
+        addedDataIndexes: <int>[dataList.length - 1],
+      );
     }
+    ;
   }
 }
 

@@ -6,7 +6,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'data.dart';
 import 'package:get/get.dart';
-import 'BG.dart';
+import 'package:flutter_app/contents/BG.dart';
 
 final client = MqttServerClient.withPort("192.168.1.101", "orlando", 1883);
 
@@ -29,6 +29,7 @@ Future<int> connect(Data data, List dataList) async {
       .withWillMessage('orlando')
       .startClean()
       // Non persistent session for testing
+      // qos 1
       .withWillQos(MqttQos.atLeastOnce);
   print('EXAMPLE::Mosquitto client connecting....');
   client.connectionMessage = connMess;
