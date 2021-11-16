@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/UI.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -30,34 +31,64 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  // int _counter = 0;
+
+  List<dynamic> patientsList = [
+    'adolescent#001',
+    'adolescent#002',
+    'adolescent#003',
+    'adolescent#004',
+    'adolescent#005',
+    'adolescent#006',
+    'adolescent#007',
+    'adolescent#008',
+    'adolescent#009',
+    'adolescent#010',
+    'adolescent#011',
+    'adolescent#012',
+  ];
   @override
   Widget build(BuildContext context) {
     final ButtonStyle style =
-        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 15));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
+      body: Container(
+          child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              '로그인화면',
+            ListView.separated(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(6),
+              itemCount: patientsList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  height: 30,
+                  child: Container(
+                      child: Row(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(right: 90),
+                        child: Text('환자명: ${patientsList[index]}'),
+                      ),
+                      ElevatedButton(
+                          style: style,
+                          child: const Text('연결 실행'),
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => UI()));
+                          }),
+                    ],
+                  )),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
             ),
-            ButtonBar(),
-            ElevatedButton(
-                style: style,
-                child: const Text('로그인'),
-                onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => UI()));
-                }),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      )), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

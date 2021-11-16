@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/contents/BG.dart';
-// import 'package:flutter_app/contents/predictBG.dart';
-// import 'package:flutter_app/contents/information.dart';
-// import 'package:flutter_app/contents/user.dart';
+import 'package:flutter_app/contents/predictBG.dart';
+import 'package:flutter_app/contents/user.dart';
 
 //기본 배경의 역할을 하는 stateless위젯
 class UI extends StatelessWidget {
@@ -42,17 +41,10 @@ class _UI_Page extends State<UI_Page> {
   static List<Widget> _widgetOptions = <Widget>[
     BG(),
     Text(
-      '예측 혈당',
-      style: optionStyle,
-    ),
-    Text(
-      '혈당 관리 정보',
-      style: optionStyle,
-    ),
-    Text(
       '사용자 정보',
       style: optionStyle,
     ),
+    User(),
   ];
 
   void _onItemTapped(int index) {
@@ -82,10 +74,6 @@ class _UI_Page extends State<UI_Page> {
           BottomNavigationBarItem(
             icon: Icon(Icons.bloodtype_outlined),
             label: 'Predict BG',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book),
-            label: 'Info',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

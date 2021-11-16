@@ -9,8 +9,7 @@ import 'package:get/get.dart';
 import 'package:flutter_app/contents/BG.dart';
 
 final client = MqttServerClient.withPort("192.168.1.101", "orlando", 1883);
-
-Future<int> connect(Data data, List dataList) async {
+Future<int> connect(Data data, List dataList, String insertedtopic) async {
   // mqtt연결 설정 지정
   client.logging(on: true);
 
@@ -23,14 +22,14 @@ Future<int> connect(Data data, List dataList) async {
   client.pongCallback = pong;
 
   final connMess = MqttConnectMessage()
-      .withClientIdentifier('connect-mqtt')
-      .withWillTopic('connect-mqtt')
+      .withClientIdentifier(insertedtopic)
+      .withWillTopic(insertedtopic)
       // If you set this you must set a will message
       .withWillMessage('orlando')
       .startClean()
       // Non persistent session for testing
       // qos 1
-      .withWillQos(MqttQos.atLeastOnce);
+      .withWillQos(MqttQos.exactlyOnce);
   print('EXAMPLE::Mosquitto client connecting....');
   client.connectionMessage = connMess;
 
@@ -54,8 +53,8 @@ Future<int> connect(Data data, List dataList) async {
   }
 
   print('EXAMPLE::Subscribing to the connect-mqtt topic');
-  const topic = 'connect-mqtt'; // Not a wildcard topic
-  client.subscribe(topic, MqttQos.atMostOnce);
+  String topic = insertedtopic; // Not a wildcard topic
+  client.subscribe(topic, MqttQos.exactlyOnce);
 
   client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
     final recMess = c![0].payload as MqttPublishMessage;

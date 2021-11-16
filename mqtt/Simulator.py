@@ -42,7 +42,7 @@ start_time = datetime.combine(now.date(), datetime.min.time())
 path = './results'
 
 # Create a simulation environment
-patient = T1DPatient.withName('child#01')
+patient = T1DPatient.withName('adolescent#001')
 sensor = CGMSensor.withName('GuardianRT', seed=1)
 pump = InsulinPump.withName('Insulet')
 scen = [(7, 45), (12, 70), (16, 15), (18, 80), (23, 10)]
